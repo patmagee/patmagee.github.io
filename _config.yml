@@ -13,12 +13,15 @@
 # you will see them accessed via {{ site.title }}, {{ site.email }}, and so on.
 # You can create any custom variable you would like, and they will be accessible
 # in the templates via {{ site.myvariable }}.
-title: My DevBlog
-email:
-description: >- # this means to ignore newlines until "baseurl:"
-  An assorted collection of things I find relevant to talk about, from software development to data analaysis and more.
+title: In3/Code
+tagline: >
+  Innovate, Iterate, Integrate. A development blog about building better and software.
+description: >
+  A development blog about building  better software to learn and tackle the toughest challenges of today. Learn about current issues in cloud computing, genomics, open source, DevOps and so much more!   
 github_username: patmagee
 minimal_mistakes_skin: contrast
+words_per_minute: 200
+
 search: false
 
 # Build settings
@@ -32,6 +35,7 @@ timezone: # https://en.wikipedia.org/wiki/List_of_tz_database_time_zones
 
 include:
   - _pages
+  - _posts
 
 # Exclude from processing.
 # The following items will not be processed, by default. Create a custom list
@@ -53,8 +57,8 @@ plugins:
 
 author:
   name   : "Patrick Magee"
-  avatar : "/assets/images/bio-photo.jpg"
-  bio    : "Just another software developer passionate about data"
+  avatar : "/assets/images/bio-photo2.jpg"
+  bio    : "Just another software developer passionate about open source and big data"
   links:
     - label: "GitHub"
       icon: "fab fa-fw fa-github"
@@ -81,7 +85,7 @@ defaults:
       layout: single
       author_profile: true
       read_time: true
-      comments: true
+      comments: false
       share: true
       related: true
   # _pages
@@ -91,6 +95,7 @@ defaults:
     values:
       layout: single
       author_profile: true
+
 
 category_archive:
   type: liquid
