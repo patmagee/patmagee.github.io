@@ -11,11 +11,12 @@ excerpt_separator: <!--more-->
 ---
 
 At some point, every developer will be faced with the daunting task of being delegated to a "maintenance" role on the 
-company dinosaur. Whether you were involved in the original project's inception, or if you are just stepping into the role now,
+company dinosaur.
+<!--more--> 
+Whether you were involved in the original project's inception, or if you are just stepping into the role now,
 there are unique challenges (both internally and with the code), which come along with maintaining legacy code. Often,
 there are lofty expectations about what can be accomplished in a relatively short period of time, with some not-so-lofty 
 resources allocated. 
-<!--more--> 
  
 ## How Did We End Up Here?
 
