@@ -86,7 +86,7 @@ that you __want__ it to exhibit (if different from above). This will give you a 
 
 ### 3. Iterate on Changes
 
-When you take the plunge and follow that rabbit down the hole, it becomes incredibly easy for scope creep to make its way into your development cycle.
+When you take the plunge and follow that rabbit down the hole, it becomes incredibly easy for scope creep to make it's way into your development cycle.
 A change that should have taken a few hours now occupies the entire sprint and other projects now are relegated to the back burner. I like to think of this as the "never ending sprint", since in every standup update you say something similar to  "Still struggling through the code", or "It will be fixed... soon",
 or "I think I am getting close". These are clear indicators that you are in a non-progressing dev cycle which makes it impossible to determine actual progress or project completeness. Remember the goal of maintenance is not to rewrite the product, but to work **with** what is already there.
 
@@ -94,15 +94,15 @@ The [scope of changes](#1-clearly-define-scope) you or you project manager defin
 
 ### 4. Refactor, Don't Reinvent
 
-Refactor the code whenever possible, and avoid changing any functionality even if you _know_ you can do it _so_ much better. Refactoring is the process of changing the structure of the code, improving its readability and performance without ever changing what it actually does. Its often difficult to determine everything which depends on a specific functionality, even if you do not see an inherent need for it. Everything likely was created for a purpose and serves a specific need that your teammates encountered in the past.
+Refactor the code whenever possible, and avoid changing any functionality even if you _know_ you can do it _so_ much better. Refactoring is the process of changing the structure of the code, improving it's readability and performance without ever changing what it actually does. It's often difficult to determine everything which depends on a specific functionality, even if you do not see an inherent need for it. Everything likely was created for a purpose and serves a specific need that your teammates encountered in the past.
 
 Additionally, now is not the time to be trendy. When you refactor, the emphasis should not be on including the latest and greatest paradigms from the fringe niches of the development world, but should favor consistency with the current code base and cleanliness.    
 
 ### 5. Up the Bus Factor
 
-As a codebase ages and goes from recent memory into myth, and then myth into legend, there seems to be one universal truth: all domain expertise over that code base is lost. Its not entirely uncommon to have a legacy project in production that no one knows how to maintain. This situation can arise when all or most of the original developers have left the company, or if the code has sat for many development cycles without ever being touched.
+As a codebase ages and goes from recent memory into myth, and then myth into legend, there seems to be one universal truth: all domain expertise over that code base is lost. It's not entirely uncommon to have a legacy project in production that no one knows how to maintain. This situation can arise when all or most of the original developers have left the company, or if the code has sat for many development cycles without ever being touched.
 
-Its tempting to try to limit the amount of pain and suffering experienced by the team by restricting the number maintainers to one, or at most two developers. This may seem like a logical choice, since everyone's time is important and the more developers you have working on maintenance, the fewer you can have working on the new flash products. This trap will inevitably lead to **more** time being wasted re-learning the code with each employee turnover. The key then is to increase the bus factor, and make sure that the knowledge of how to work with the code is distributed amongst multiple people on your team. Some tactics that have helped me in the past are:
+It's tempting to try to limit the amount of pain and suffering experienced by the team by restricting the number maintainers to one, or at most two developers. This may seem like a logical choice, since everyone's time is important and the more developers you have working on maintenance, the fewer you can have working on the new flashy products. This trap will inevitably lead to **more** time being wasted re-learning the code with each employee turnover. The key then is to increase the bus factor, and make sure that the knowledge of how to work with the code is distributed amongst multiple people on your team. Some tactics that have helped me in the past are:
 
 - After you have taken the deep dive into the code, share the knowledge! Hold a lunch and learn to explain to your coworkers what you have discovered and lead them through the code base.
 - Do some pair programing to educe others on some of the more difficult portions of code that encountered
