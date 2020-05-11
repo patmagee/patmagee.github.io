@@ -67,6 +67,12 @@ author:
       icon: "fab fa-fw fa-linkedin-in"
       url: "https://www.linkedin.com/in/patrickjmagee/"
 
+analytics:
+  provider: "google-gtag"
+  google:
+    tracking_id: "UA-166245750-1"
+    anonymize_ip: false
+
 footer:
   links:
     - label: "GitHub"
