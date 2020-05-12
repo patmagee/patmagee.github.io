@@ -18,14 +18,14 @@ At this point, you may be asking yourself, "Why would I sacrifice all of these f
 
 - Jdbi has both a declarative and a fluent API. Both are incredibly easy to use, allow you to write clean and concise code, and leave little to the imagination about what is actually happening under the hood 
 - Closures! One of my biggest complaints with using Hibernate is that connection boundaries are often hidden by the application server. Jdbi completely solves this with the ability to use Closures to explicitly define a connection lifecycle
-- Easy automatic mapping of rows and columns into Beans where convenient, but the power to easily define custom behaviour when needed.
-- Use native Joins, selects and complex queries and return whatever you want! Since your data model is not represented as code, you are not beholden to it when returning query results.  New views of data can easily be constructed and mapped into custom beans with little to no effort
+- Easy automatic mapping of rows and columns into Beans where convenient, but the power to easily define custom behaviour when needed
+- Use native Joins, selects and complex queries instead of relying on application logic (ie Hibernate uses sub selects for joins). Since your data model is not represented as code, you are not beholden to it when returning query results.  New views of data can easily be constructed and mapped into custom beans with little to no effort
 - And finally since there is no middle layer managing your data, it is much more performant then Many ORMs!
 
 
 # Building a Simple Application Using Jdbi And Spring Boot
 
-The following small tutorial will outline some easy steps to get you started with using Jdbi within your own spring project. Both tools are incredibly feature rich, and this tutorial will not dive into the more powerful features of each, but just provide an overview of setup. Stay tuned for future posts for more information! 
+The following small tutorial will outline some easy steps to get you started with using Jdbi within your own spring project. Both tools are incredibly feature rich. This tutorial will provide an overview of how to get setup with Jdbi3 in a spring boot application, but will not dive into the more powerful features of each. Stay tuned for future posts for more information. 
 
 ## Add Jdbi Dependencies to your Project
 
@@ -57,11 +57,11 @@ Before you begin, you will need to add several Jdbi dependencies to your `pom.xm
 </dependencies>
 ```
 
-Adding the `spring-boot-starter-data-jdbc` library is a lightweight way to get all of the handy spring-boot auto configuration for a `DataSource` without adding unnecessary dependencies to your project. Since `Jdbi` is just a wrapper around `JDBC` we are not adding anything which will not be used
+Adding the `spring-boot-starter-data-jdbc` library is a lightweight way to get all of the handy spring-boot auto configuration for a `DataSource` without adding unnecessary dependencies to your project. Since `Jdbi` is just a wrapper around `JDBC` we are not adding anything which will not be used.
 
 ## Setting up a DataSource
 
-Before we start using our application, we will need to tell Spring where the database is which we would like it to use. The simplest way to achieve this is to add a few entries to our `src/main/resources/application.yml`. Generally, I will hard-code the values I need to develop locally in the `application.yml` then either provide a `prod` profile, or take advantage of springs [externalized configuration model](https://docs.spring.io/spring-boot/docs/current/reference/html/spring-boot-features.html#boot-features-external-config).
+Before we start using our application, we will need to tell Spring connection information of the database. The simplest way to achieve this is to add a few entries to our `src/main/resources/application.yml`. Generally, I will hard-code the values I need to develop locally in the `application.yml` then either provide a `prod` profile, or take advantage of springs [externalized configuration model](https://docs.spring.io/spring-boot/docs/current/reference/html/spring-boot-features.html#boot-features-external-config).
 
 ```yaml
 spring:
@@ -78,7 +78,7 @@ spring:
 
 ## Configure Jdbi Bean
 
-We are going to want to make Jdbi available to the application aTEstingTs a bean which can be autowired into whatever services need it.To do this, we can create a new configuration class and to register the necessary bean.
+We are going to want to make Jdbi available to the application, creating a bean which can be autowired into whichever services need it.To do this, we can create a new configuration class and to register the necessary bean.
 
 ```java
 @Configuration
@@ -93,11 +93,11 @@ public class JdbiConfiguration {
 }
 ```
 
-Thanks to `spring-boot-starter-data-jdbc` there is no need to configure a DataSource ourselves, instead, we allow spring to inject a previously defined `DataSource` bean directly into the  `jdbi()` Bean definition method. With  Finally, we create the `Jdbi` bean and make sure to initialize the correct plugins, allowing `Jdbi` to understand the specific data types and operations (ie Postgres `jsonb` data) used by Postgres.
+Thanks to `spring-boot-starter-data-jdbc` there is no need to configure a DataSource ourselves, instead, we allow spring to inject a previously defined `DataSource` bean directly into the  `jdbi()` Bean definition method. Finally, we create the `Jdbi` bean and make sure to initialize the correct plugins, allowing `Jdbi` to understand the specific data types and operations (ie Postgres `jsonb` data) used by Postgres.
 
 ## Create a POJO
 
-We will want to create a simple POJO to represent our data. Its important to note, that this does not need to correspond at all with our data model, but can contain anything that is useful for our needs without changing the data model. Jdbi will not auto generate any data model as in Hibernate. Please note, the `@Data` annotation is from [lombok](https://projectlombok.org/), a handy library for ANY java developer!
+We will want to create a simple POJO to represent our data. It's important to note, that this does not need to correspond at all with our data model, but can contain anything that is useful for our needs without changing the data model. Jdbi will not auto generate any data model as in Hibernate. Please note, the `@Data` annotation is from [lombok](https://projectlombok.org/), a handy library for ANY java developer!
 
 ```java
 @Data
@@ -111,7 +111,7 @@ public class User {
 
 ## Define a Declarative DAO
 
-I am a big fan of Jdbi's declarative approach to defining persistence interactions. This approach uses interfaces with a combination of annotations which Jdbi can then use to generate an implementation of a DAO for you. By using the declarative approach you have a clear picture of exactly what is happening when jdbi executes your code.
+I am a big fan of Jdbi's declarative approach to defining persistence interactions. This approach uses interfaces with a combination of annotations which, Jdbi can then use to generate an implementation of a DAO for you. By using the declarative approach you have a clear picture of exactly what is happening when jdbi executes your code.
 
 
 ```java
@@ -140,7 +140,7 @@ There is a lot happening here, however from the annotations it is easy to unders
 
 With Jdbi you can provide a parameterized `SQL` string and  bind method arguments when the `SQL` is executed. There are two methods demonstrated above (however Jdbi provides many more binding approaches) `@Bind` and `@BindBean`. The `@Bind` annotation maps a method argument to a specific parameter in the `SQL`, whereas the `@BindBean` annotation will use the `getters` of a bean to bind all of its properties to matching parameters in the `SQL`.
 
-Finally, Jdbi provides simple approaches for mapping rows (even joined rows), into a desired bean or primitive type. The above example uses the `@RegisterBeanMapper(User.class)` annotation to tell Jdbi to convert the returned row into a `User` object, using the setter's that are present. Its important to note, that this does not Proxy the `User` class like Hibernate does, and the object you get back is a true POJO. If you require more control over how a bean is mapped Jdbi offers many additional strategies for doing row, column and collection level mapping.
+Finally, Jdbi provides simple approaches for mapping rows (even joined rows), into a desired bean or primitive type. The above example uses the `@RegisterBeanMapper(User.class)` annotation to tell Jdbi to convert the returned row into a `User` object, using the setter's that are present. It's important to note, that this does not Proxy the `User` class like Hibernate does, and the object you get back is a true POJO. If you require more control over how a bean is mapped, Jdbi offers many additional strategies for doing row, column and collection level mapping.
 
 ## Setup A Controller 
 
@@ -175,9 +175,9 @@ public class UserController {
 }
 ```
 
-In the controller we are interacting with `Jdbi` using closures. In my opinion, this is a great approach for interacting with a database: it explicitly defines connection boundaries, it separates persistence logic from the service layer and it guarantees there are no side effects outside of the closure. Its clear, concise and clean code that will make your life easier.
+In the controller we are interacting with `Jdbi` using closures. In my opinion, this is a great approach for interacting with a database: it explicitly defines connection boundaries, it separates persistence logic from the service layer and it guarantees there are no side effects outside of the closure. It's clear, concise and clean code that will make your life easier.
 
-There are two specific methods which we are using here: `withExtension` and `useExtension` which takes as a parameter the `Dao` interface to use as an "extension", and then it accepts closure passing in the `dao` instance it created from our interface. `withExtension` provides a way to return a value, whereas `useExtension` allows us to simply run something against the database. `Jdbi` of course provides additional ways that retrieve and update data, for a full breakdown please refer to the official documentation.
+There are two specific methods which we are using here: `withExtension` and `useExtension`. These methods takes as a parameter the `Dao` interface to use as an "extension", and then then a lambda function or method reference for the closure. The closure is passed a single argument, the `dao` instance created from our interface. `withExtension` provides a way to return a value, whereas `useExtension` allows us to simply run something against the database. `Jdbi` of course provides additional ways that retrieve and update data, for a full breakdown please refer to the official documentation.
 
 ## Create your Spring Boot Application
 
@@ -230,4 +230,4 @@ curl 'http://localhost:8080/users/1589208108922'
 
 # Closing
 
-At this point, you should understand how to setup a simple spring-boot application with `Jdbi` powering the persistence layer! If you are interested in learning more about the amazing features that `Jdbi` offers, you can check out the [official documentation](https://jdbi.org/). If you would like to follow along, you can find all of the source code of this tutorial on [GitHub](https://github.com/patmagee/jdbi-tutorial-examples/tree/master/jdbi-example-sprint-boot)
+At this point, you should understand how to setup a simple spring-boot application with `Jdbi` powering the persistence layer! If you are interested in learning more about the amazing features that `Jdbi` offers, you can check out the [official documentation](https://jdbi.org/). If you would like to follow along, you can find all of the source code of this tutorial on [GitHub](https://github.com/patmagee/jdbi-tutorial-examples/tree/master/jdbi-example-sprint-boot).
